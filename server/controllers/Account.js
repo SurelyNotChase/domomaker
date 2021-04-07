@@ -1,5 +1,5 @@
 const models = require('../models');
-const { AccountModel } = require('../models/Account');
+// const { AccountModel } = require('../models/Account');
 
 const { Account } = models;
 
@@ -65,7 +65,7 @@ const signup = (request, response) => {
     const savePromise = newAccount.save();
     savePromise.then(() => {
       req.session.account = Account.AccountModel.toAPI(newAccount);
-      return res.json({ redirect: '/maker' })
+      return res.json({ redirect: '/maker' });
     });
     savePromise.catch((err) => {
       console.log(err);
