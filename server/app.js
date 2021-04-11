@@ -32,26 +32,25 @@ mongoose.connect(dbURL, mongooseOptions, (err) => {
 
 let redisUrl = {
   hostname: 'redis-10795.c263.us-east-1-2.ec2.cloud.redislabs.com',
-  port: '10795'
+  port: '10795',
 
+};
+
+let redisPass = 'rFler2oY0OmBlJ0GxHuTTiEAPpi8hbkX';
+if (process.env.REDISCLOUD_URL) {
+  redisUrl = url.parse(process.env.REDISCLOUD_URL);
+  [, redisPass] = redis.URL.auth.split(':');
 }
 
-let redisPASS = 'rFler2oY0OmBlJ0GxHuTTiEAPpi8hbkX';
-if(process.env.REDISCLOUD_URL){
-  redisURL = url.parse(process.env.REDISCLOUD_URL);
-  [,redisPass] = redis.URL.auth.split(':');
-
-}
-
-let redisClient = redis.createClient({
+const redisClient = redis.createClient({
   host: redisUrl.hostname,
   port: redisUrl.port,
-  password: redisPASS,
+  password: redisPass,
 
 });
 
+// const { request } = require('express');
 const router = require('./router.js');
-const { request } = require('express');
 
 const app = express();
 app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
@@ -75,18 +74,16 @@ app.use(session({
   },
 
 }));
-app.use(csrf); //must be after cookie parser and app.use(sesssion({...})); and it must come before the router
-app.use((err,req,res,next)=>{
-  if(err.code != 'EBADCSRFTOKEN') return next(err);
-  
-console.log('Missing CSRF token');
-return false;
+app.use(csrf); // must be after cookie parser, before router
+app.use((err, req, res, next) => {
+  if (err.code !== 'EBADCSRFTOKEN') return next(err);
 
-})
+  console.log('Missing CSRF token');
+  return false;
+});
 app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/../views`);
-
 
 router(app);
 
