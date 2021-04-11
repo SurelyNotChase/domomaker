@@ -62,7 +62,7 @@ const signup = (request, response) => {
 
     const newAccount = new Account.AccountModel(accountData);
 
-    const savePromise = newAccount.save((err, doc) => {
+    newAccount.save((err, doc) => {
       if (err) {
         console.log(err);
 
