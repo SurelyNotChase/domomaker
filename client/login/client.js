@@ -1,4 +1,4 @@
-const { createSign } = require("node:crypto");
+
 
 const handleLogin = (e) => {
     e.preventDefault();
@@ -11,7 +11,7 @@ const handleLogin = (e) => {
 
     }
 
-    console.log($("input[name=_csurf]").val());
+    console.log($("input[name=_csrf]").val());
 
     sendAjax('POST',$("#loginForm").attr("action"), $("#loginForm").serialize(),redirect);
 
@@ -41,6 +41,7 @@ const handleSignup = (e) => {
 }
 
 const LoginWindow = (props) => {
+    
     return (
         <form id="loginForm" name="loginForm"
          onSubmit={handleLogin}
@@ -60,9 +61,33 @@ const LoginWindow = (props) => {
     );
 }
 
+const SignupWindow = (props) => {
+    
+    return (
+        <form id="signupForm" 
+         name="signupForm"
+         onSubmit={handleSignup}
+         action="/signup"
+         method="POST"
+         className = "mainForm"
+        >
+            <label htmlFor="username">Username: </label>
+            <input id="user" type="text" name="username" placeholder="username"/>
+            <label htmlFor="pass">Password: </label>
+            <input id="pass" type="password" name="pass" placeholder="password"/>
+            <label htmlFor="pass2">Password: </label>
+            <input id="pass2" type="password" name="pass2" placeholder="retype password"/>
+            <label type="hidden" name="_csrf" value={props.csrf}/>
+            <input className="formSubmit" type="submit" value="Sign Up"/>
+
+        </form>
+
+    );
+}
+
 const createLoginWindow = (csrf) => {
     ReactDOM.render(
-        <LoginWindow csrf ={csrf} />,
+        <LoginWindow csrf = {csrf} />,
         document.querySelector("#content")
 
     );

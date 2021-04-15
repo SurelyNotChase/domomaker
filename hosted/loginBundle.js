@@ -1,5 +1,4 @@
-var _require = require("node:crypto"),
-    createSign = _require.createSign;
+"use strict";
 
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
@@ -12,7 +11,7 @@ var handleLogin = function handleLogin(e) {
     return false;
   }
 
-  console.log($("input[name=_csurf]").val());
+  console.log($("input[name=_csrf]").val());
   sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
   return false;
 };
@@ -67,6 +66,46 @@ var LoginWindow = function LoginWindow(props) {
     className: "formSubmit",
     type: "submit",
     value: "Sign in"
+  }));
+};
+
+var SignupWindow = function SignupWindow(props) {
+  return /*#__PURE__*/React.createElement("form", {
+    id: "signupForm",
+    name: "signupForm",
+    onSubmit: handleSignup,
+    action: "/signup",
+    method: "POST",
+    className: "mainForm"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "username"
+  }, "Username: "), /*#__PURE__*/React.createElement("input", {
+    id: "user",
+    type: "text",
+    name: "username",
+    placeholder: "username"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "pass"
+  }, "Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "pass",
+    type: "password",
+    name: "pass",
+    placeholder: "password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "pass2"
+  }, "Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "pass2",
+    type: "password",
+    name: "pass2",
+    placeholder: "retype password"
+  }), /*#__PURE__*/React.createElement("label", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "formSubmit",
+    type: "submit",
+    value: "Sign Up"
   }));
 };
 
