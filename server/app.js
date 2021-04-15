@@ -75,7 +75,9 @@ app.use(session({
 
 }));
 
-
+app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+app.set('views', `${__dirname}/../views`);
 
 app.use(csrf()); // must be after cookie parser, before router
 app.use((err, req, res, next) => {
@@ -83,9 +85,7 @@ app.use((err, req, res, next) => {
   console.log('Missing CSRF token');
   return false;
 });
-app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
-app.set('view engine', 'handlebars');
-app.set('views', `${__dirname}/../views`);
+
 
 router(app);
 

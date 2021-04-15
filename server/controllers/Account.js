@@ -22,6 +22,7 @@ const login = (request, response) => {
   const username = `${req.body.username}`;
   const password = `${req.body.pass}`;
 
+
   if (!username || !password) {
     return res.status(400).json({ error: 'RAWR All fields are required' });
   }
@@ -82,7 +83,7 @@ const signup = (request, response) => {
 const getToken = (request, response) => {
   const req = request;
   const res = response;
-
+  console.log(req.csrfToken())
   const csrfJSON = {
     csrfToken: req.csrfToken(),
   };
